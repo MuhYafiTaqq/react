@@ -9,7 +9,7 @@ export default function NavBar() {
     
     return (
         <>
-        <nav className=" h-13 w-full fixed bottom-0 bg-black pb-1">
+        <nav className=" h-13 w-full fixed bottom-0 bg-black pb-1 drop-shadow-[0_-1px_10px_rgba(255,255,255,0.1)]">
             <div className=" h-full w-full flex gap-2 text-white justify-center items-center">
 
                 <a href="#" className={`w-10 h-10  flex flex-col justify-center items-center rounded-xl relative hover:bg-white/20 transition-all duration-400 ${ active === "home" ? "bg-white/20 before:content-[''] before:scale-100 before:transition-all before:duration-400 before:-bottom-2 before:h-1 before:w-5 before:bg-amber-50 before:absolute before:rounded-t-full" : "before:scale-0" }`}
