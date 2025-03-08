@@ -3,6 +3,7 @@ import './App.css'
 
 import Input from './assets/pages/input';
 import Setings from './assets/pages/setings';
+import Result from "./assets/pages/result";
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Input />} />
         <Route path="/setings" element={<Setings />} />
+        <Route path="/result" element={<Result />} />
       </Routes>
     </Router>
     </>
