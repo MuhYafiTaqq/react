@@ -252,7 +252,7 @@ export default function Setings() {
                                 Kurangi ke Bawah
                             </button>
                         </>
-)}
+                        )}
                     </div>
                     <button onClick={handleCrop} className="bg-green-500 text-white px-4 py-2 rounded mb-4">Potong Gambar</button>
                 </div>
