@@ -350,10 +350,10 @@ export default function Setings() {
         <>
             <Header />
             <div className="h-dvh pt-6 pb-13">
-                <div ref={prevRef} className="flex flex-col justify-center mx-2 h-3/4 items-center border-2 border-amber-100">
+                <div ref={prevRef} className="flex flex-col justify-center mx-2 h-3/4 items-center">
                     <canvas ref={canvasRef} className="border-2 border-black"></canvas>
                 </div>
-                <div className="h-1/4 px-3 py-1 w-full border-2 border-amber-600">
+                <div className="h-1/4 px-3 py-1 w-full">
                     <p className="flex items-center gap-2 text-white mb-1 text-sm">
                         <VscSettings className="h-4 w-4"/>
                         Type
@@ -410,8 +410,10 @@ export default function Setings() {
                             )}
                         </div>
                     </div>
-                    <button onClick={handleCrop} className="mt-2 text-sm bg-green-700 font-bold border-2 border-green-800 text-white w-1/2 px-4 py-0.5 rounded-full">Potong Gambar</button>
-                    <button onClick={() => navigate("/")} className="mt-2 text-sm border-2 border-white text-white ml-5 w-1/3 px-4 py-0.5 rounded-full">Back</button>
+                    <div>
+                        <button onClick={handleCrop} className="mt-2 text-sm bg-green-700 font-bold border-2 border-green-800 text-white w-1/2 px-4 py-0.5 rounded-full">Potong Gambar</button>
+                        <button onClick={() => navigate("/")} className="mt-2 text-sm border-2 border-white text-white ml-5 w-1/3 px-4 py-0.5 rounded-full">Back</button>
+                    </div>
                 </div>
             </div>
         </>
