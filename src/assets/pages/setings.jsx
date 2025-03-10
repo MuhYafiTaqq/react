@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { VscSettings } from "react-icons/vsc";
 
 import Header from "../components/Header";
 
@@ -15,7 +16,6 @@ export default function Setings() {
     const [height, setHeight] = useState(0);
     const [width, setWidth] = useState(0);
     const [croppedImages, setCroppedImages] = useState([]);
-    
     const handleAddColumn = () => setGridCols(gridCols + 1);
     const handleRemoveColumn = () => gridCols > 1 && setGridCols(gridCols - 1);
     const handleAddRow = () => setGridRows(gridRows + 1);
@@ -101,6 +101,7 @@ export default function Setings() {
     };
 
     const drawGrid = (ctx, canvas) => {
+        
         let aspectRatio = 1440 / 3312; // Rasio asli (lebar : tinggi)
         
         let cellWidth, cellHeight;
@@ -130,28 +131,61 @@ export default function Setings() {
             if (totalHeight < canvas.height) {
                 startY = (canvas.height - totalHeight) / 2;
             }
-        } else {
-            // Mode lain (custom, carousel), bagi secara normal
+        }
+        else if (cropMode === "carousel") {
+            aspectRatio = 4 / 5; // Rasio 4:5
+            cellWidth = canvas.width / gridCols;
+            cellHeight = cellWidth / aspectRatio; // Sesuaikan tinggi agar tetap 4:5
+
+            let totalWidth = cellWidth * gridCols;
+            let totalHeight = cellHeight;
+
+            // **Cek apakah tinggi melebihi gambar asli, jika iya, sesuaikan**
+            if (totalHeight > canvas.height) {
+                cellHeight = canvas.height;
+                cellWidth = cellHeight * aspectRatio;
+            }
+
+            totalWidth = cellWidth * gridCols;
+            totalHeight = cellHeight;
+
+            // **Hitung posisi awal crop agar grid tepat di tengah**
+            startX = (canvas.width - totalWidth) / 2;
+            startY = (canvas.height - totalHeight) / 2; // **Pusatkan secara vertikal**
+        }
+        else if (cropMode === "custom") {
+            // **Mode custom: Potong sesuai jumlah kolom & baris user, tanpa aspek rasio khusus**
             cellWidth = canvas.width / gridCols;
             cellHeight = canvas.height / gridRows;
+    
+            // **Sesuaikan jika total ukuran melebihi gambar asli**
+            let totalWidth = cellWidth * gridCols;
+            let totalHeight = cellHeight * gridRows;
+    
+            if (totalWidth > canvas.width) {
+                cellWidth = canvas.width / gridCols;
+            }
+            if (totalHeight > canvas.height) {
+                cellHeight = canvas.height / gridRows;
+            }
+    
+            startX = (canvas.width - (cellWidth * gridCols)) / 2;
+            startY = (canvas.height - (cellHeight * gridRows)) / 2;
         }
     
+        // 🔹 **Gambar Grid Sesuai Mode**
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
     
         for (let i = 0; i < gridCols; i++) {
             for (let j = 0; j < gridRows; j++) {
                 let x = startX + i * cellWidth;
-                let y = startY + j * cellHeight; 
-    
+                let y = startY + j * cellHeight;
                 ctx.strokeRect(x, y, cellWidth, cellHeight);
             }
         }
     };
     
-    
-
-
     const handleCrop = () => {
         const img = new Image();
         img.src = imgSrc;
@@ -161,39 +195,73 @@ export default function Setings() {
             let croppedData = [];
 
             if (cropMode === "grid") {
-                let aspectRatio = 1440 / 3312; // Sesuai rasio gambar
-                let cellWidth = originalWidth / gridCols;
-                let cellHeight = cellWidth * aspectRatio;
-        
-                let totalWidth = cellWidth * gridCols;
-                let totalHeight = cellHeight * gridRows;
-        
+                let aspectRatio = 1440 / 3312; // Rasio asli (lebar : tinggi)
                 let startX = 0, startY = 0;
-        
-                if (totalWidth < originalWidth) {
-                    startX = (originalWidth - totalWidth) / 2;
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext("2d");
+            
+                // 🔹 Hitung skala antara ukuran asli dan ukuran canvas
+                let scaleX = originalWidth / canvas.width;
+                let scaleY = originalHeight / canvas.height;
+            
+                // 🔹 Hitung ukuran grid berdasarkan gambar asli
+                let gridCellWidth = originalWidth / gridCols;
+                let gridCellHeight = gridCellWidth * aspectRatio;
+            
+                let totalGridWidth = gridCellWidth * gridCols;
+                let totalGridHeight = gridCellHeight * gridRows;
+            
+                if (totalGridHeight > originalHeight) {
+                    gridCellHeight = originalHeight / gridRows;
+                    gridCellWidth = gridCellHeight / aspectRatio;
                 }
-                if (totalHeight < originalHeight) {
-                    startY = (originalHeight - totalHeight) / 2;
+            
+                totalGridWidth = gridCellWidth * gridCols;
+                totalGridHeight = gridCellHeight * gridRows;
+            
+                // 🔹 Pusatkan grid dalam gambar asli
+                if (totalGridWidth < originalWidth) {
+                    startX = (originalWidth - totalGridWidth) / 2;
                 }
-        
+                if (totalGridHeight < originalHeight) {
+                    startY = (originalHeight - totalGridHeight) / 2;
+                }
+            
                 for (let j = 0; j < gridRows; j++) {
                     for (let i = 0; i < gridCols; i++) {
                         let cropCanvas = document.createElement("canvas");
                         let cropCtx = cropCanvas.getContext("2d");
-        
-                        cropCanvas.width = 1080; // Ukuran tetap output
-                        cropCanvas.height = 1350;
-        
-                        let sx = startX + i * cellWidth;
-                        let sy = startY + j * cellHeight;
-        
-                        cropCtx.drawImage(img, 
-                            sx, sy, cellWidth, cellHeight,  // Area yang di-crop dari gambar asli
-                            0, 0, 1080, 1350               // Hasil crop akan disesuaikan ke ukuran 1080x1350
+            
+                        // 🔹 Hitung posisi crop berdasarkan gambar asli
+                        let cropX = startX + i * gridCellWidth;
+                        let cropY = startY + j * gridCellHeight;
+            
+                        cropCanvas.width = 3312; // Ukuran output tetap
+                        cropCanvas.height = 1440;
+            
+                        cropCtx.drawImage(
+                            img,
+                            cropX, cropY, gridCellWidth, gridCellHeight, // **Crop area di gambar asli**
+                            0, 0, 3105, 1350 // **Resize hasil crop ke 3312x1440**
                         );
-        
-                        croppedData.push(cropCanvas.toDataURL("image/png"));
+            
+                        // 🔹 **Bagi hasil crop menjadi 3 bagian**
+                        let cropWidths = [0, 1013, 2025]; // Posisi kiri, tengah, kanan
+                        for (let k = 0; k < 3; k++) {
+                            let cropCanvas2 = document.createElement("canvas");
+                            let cropCtx2 = cropCanvas2.getContext("2d");
+            
+                            cropCanvas2.width = 1080; // Ukuran output tetap
+                            cropCanvas2.height = 1350;
+            
+                            cropCtx2.drawImage(
+                                cropCanvas,
+                                cropWidths[k], 0, 1080, 1350, // **Crop area di hasil grid**
+                                0, 0, 1080, 1350 // **Resize hasil crop ke 1080x1350**
+                            );
+            
+                            croppedData.push(cropCanvas2.toDataURL("image/png"));
+                        }
                     }
                 }
             }
@@ -221,25 +289,53 @@ export default function Setings() {
                 }
             }
             else if (cropMode === "carousel") {
-                // MODE CAROUSEL: Memotong hanya ke kanan
-                let slideWidth = originalWidth / gridCols;
-                let slideHeight = originalHeight; // Tinggi tetap penuh
+                // MODE CAROUSEL: Memotong dari tengah dengan aspek rasio 4:5
+                let targetWidth = 1080; // 4:5 aspect ratio (width)
+                let targetHeight = 1350; // 4:5 aspect ratio (height)
+
+                // Hitung total lebar dan tinggi hasil crop
+                let totalCropWidth = gridCols * targetWidth;
+                let totalCropHeight = targetHeight;
+
+                // Hitung posisi awal cropping dari tengah gambar asli
+                let startX = (originalWidth - totalCropWidth) / 2;
+                let startY = (originalHeight - totalCropHeight) / 2;
+
+                // **Jika grid lebih lebar dari gambar asli, sesuaikan ukuran crop**
+                if (totalCropWidth > originalWidth) {
+                    let scaleFactor = originalWidth / totalCropWidth;
+                    targetWidth *= scaleFactor;
+                    targetHeight *= scaleFactor;
+                    startX = 0; // Mulai dari kiri
+                }
+
+                // **Jika tinggi crop lebih besar dari gambar asli, sesuaikan juga**
+                if (targetHeight > originalHeight) {
+                    let scaleFactor = originalHeight / targetHeight;
+                    targetWidth *= scaleFactor;
+                    targetHeight *= scaleFactor;
+                    startY = 0; // Mulai dari atas
+                }
 
                 for (let i = 0; i < gridCols; i++) {
                     let cropCanvas = document.createElement("canvas");
                     let cropCtx = cropCanvas.getContext("2d");
-                    cropCanvas.width = slideWidth;
-                    cropCanvas.height = slideHeight;
+                    
+                    cropCanvas.width = 1080; // Ukuran output tetap 4:5
+                    cropCanvas.height = 1350;
+
+                    let cropX = startX + i * targetWidth; // Mulai crop dari tengah secara horizontal
+                    let cropY = startY + (originalHeight - targetHeight) / 2; // **Fix: Crop benar-benar dari tengah vertikal**
 
                     cropCtx.drawImage(
                         img,
-                        i * slideWidth, 0,
-                        slideWidth, slideHeight,
-                        0, 0, slideWidth, slideHeight
+                        cropX, cropY, targetWidth, targetHeight, // **Crop area di gambar asli**
+                        0, 0, 1080, 1350 // **Resize ke 1080x1350**
                     );
 
                     croppedData.push(cropCanvas.toDataURL("image/png"));
                 }
+
             }
 
 
@@ -255,38 +351,47 @@ export default function Setings() {
                 <div ref={prevRef} className="flex flex-col justify-center mx-2 h-3/4 items-center border-2 border-amber-100">
                     <canvas ref={canvasRef} className="border-2 border-black"></canvas>
                 </div>
-                <div className="h-1/4 w-full border-2 border-amber-600">
-                    <div className="flex space-x-4 mb-4">
+                <div className="h-1/4 px-3 py-1 w-full border-2 border-amber-600">
+                    <p className="flex items-center gap-2 text-white mb-1.5 text-lg">
+                        <VscSettings className="h-6 w-6"/>
+                        Type
+                    </p>
+                    <div className={`inline-flex p-1 mb-4 border-1 border-white rounded-full relative before:content-[''] before:absolute before:w-28 before:h-full before:bg-amber-50 before:top-0 before:rounded-full before:z-1 ${cropMode === "custom" ? "before:left-0" : cropMode === "grid" ? "before:right-0" : "before:right-25"}`}>
                         <button onClick={() => { setCropMode("custom"); resetGrid(); }} 
-                            className={`px-4 py-2 rounded ${cropMode === "custom" ? "bg-blue-600 text-white" : "bg-gray-400 text-black"}`}>
+                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "custom" ? "text-black font-bold" : "text-white"}`}>
                             Custom
                         </button>
                         <button onClick={() => { setCropMode("carousel"); resetGrid(); }} 
-                            className={`px-4 py-2 rounded ${cropMode === "carousel" ? "bg-blue-600 text-white" : "bg-gray-400 text-black"}`}>
+                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "carousel" ? "text-black font-bold" : "text-white"}`}>
                             Carousel
                         </button>
                         <button onClick={() => { setCropMode("grid"); resetGrid(); }} 
-                            className={`px-4 py-2 rounded ${cropMode === "grid" ? "bg-blue-600 text-white" : "bg-gray-400 text-black"}`}>
+                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "grid" ? "text-black font-bold" : "text-white"}`}>
                             Grid
                         </button>
                     </div>
+
                     <div className="flex">
-                        <button onClick={handleAddColumn} className="bg-blue-500 text-white px-4 py-2 rounded mb-2">Tambah ke Kanan</button>
-                        <button onClick={handleRemoveColumn} className="bg-red-500 text-white px-4 py-2 rounded mb-2">Kurangi ke Kanan</button>
+                        {(cropMode === "custom" || cropMode === "carousel") && (
+                        <>
+                            <button onClick={handleAddColumn} className="text-sm bg-blue-500 text-white px-4 py-1 rounded mb-2">Tambah ke Kanan</button>
+                            <button onClick={handleRemoveColumn} className="text-sm bg-red-500 text-white px-4 py-1 rounded mb-2">Kurangi ke Kanan</button>
+                        </>
+                        )}
                     </div>
                     <div className="flex">
                         {(cropMode === "custom" || cropMode === "grid") && (
                         <>
-                            <button onClick={handleAddRow} className="bg-blue-500 text-white px-4 py-2 rounded mb-2">
+                            <button onClick={handleAddRow} className="text-sm bg-blue-500 text-white px-4 py-1 rounded mb-2">
                                 Tambah ke Bawah
                             </button>
-                            <button onClick={handleRemoveRow} className="bg-red-500 text-white px-4 py-2 rounded mb-2">
+                            <button onClick={handleRemoveRow} className="text-sm bg-red-500 text-white px-4 py-1 rounded mb-2">
                                 Kurangi ke Bawah
                             </button>
                         </>
                         )}
                     </div>
-                    <button onClick={handleCrop} className="bg-green-500 text-white px-4 py-2 rounded mb-4">Potong Gambar</button>
+                    <button onClick={handleCrop} className="mt-2 text-sm bg-green-500 text-white px-4 py-1 rounded">Potong Gambar</button>
                 </div>
             </div>
         </>
