@@ -15,6 +15,7 @@ export default function Setings() {
     const [height, setHeight] = useState(0);
     const [width, setWidth] = useState(0);
     const [croppedImages, setCroppedImages] = useState([]);
+    
     const handleAddColumn = () => setGridCols(gridCols + 1);
     const handleRemoveColumn = () => gridCols > 1 && setGridCols(gridCols - 1);
     const handleAddRow = () => setGridRows(gridRows + 1);
@@ -100,31 +101,55 @@ export default function Setings() {
     };
 
     const drawGrid = (ctx, canvas) => {
-        let cellWidth = canvas.width / gridCols;
-        let cellHeight = canvas.height / gridRows;
+        let aspectRatio = 1440 / 3312; // Rasio asli (lebar : tinggi)
         
-        let startY = 0;
+        let cellWidth, cellHeight;
+        let startX = 0, startY = 0;
+    
         if (cropMode === "grid") {
-            cellWidth = canvas.width;
-            cellHeight = (canvas.width * 1440) / 3312; // Sesuai rasio 3312:1440
-
+            // Hitung ukuran sel berdasarkan aspek rasio
+            cellWidth = canvas.width / gridCols;
+            cellHeight = cellWidth * aspectRatio;
+    
+            let totalWidth = cellWidth * gridCols;
             let totalHeight = cellHeight * gridRows;
+    
+            // Jika total tinggi lebih besar dari canvas, sesuaikan ukuran grid
             if (totalHeight > canvas.height) {
+                cellHeight = canvas.height / gridRows;
+                cellWidth = cellHeight / aspectRatio;
+            }
+    
+            totalWidth = cellWidth * gridCols;
+            totalHeight = cellHeight * gridRows;
+    
+            // Pusatkan grid di tengah-tengah canvas
+            if (totalWidth < canvas.width) {
+                startX = (canvas.width - totalWidth) / 2;
+            }
+            if (totalHeight < canvas.height) {
                 startY = (canvas.height - totalHeight) / 2;
             }
         } else {
+            // Mode lain (custom, carousel), bagi secara normal
             cellWidth = canvas.width / gridCols;
             cellHeight = canvas.height / gridRows;
         }
-
+    
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
+    
         for (let i = 0; i < gridCols; i++) {
             for (let j = 0; j < gridRows; j++) {
-                ctx.strokeRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+                let x = startX + i * cellWidth;
+                let y = startY + j * cellHeight; 
+    
+                ctx.strokeRect(x, y, cellWidth, cellHeight);
             }
         }
     };
+    
+    
 
 
     const handleCrop = () => {
@@ -136,34 +161,41 @@ export default function Setings() {
             let croppedData = [];
 
             if (cropMode === "grid") {
-                let blockWidth = img.width;
-                let blockHeight = (img.width * 1440) / 3312;
-                let adjustedBlockHeight = Math.min((blockHeight * 1350) / 1440, img.height);
-                let cropWidth = blockWidth / 3;
-                let cropHeight = adjustedBlockHeight;
-
-                let totalHeight = blockHeight * gridRows;
-                let startY = Math.max((img.height - totalHeight) / 2, 0);
-
+                let aspectRatio = 1440 / 3312; // Sesuai rasio gambar
+                let cellWidth = originalWidth / gridCols;
+                let cellHeight = cellWidth * aspectRatio;
+        
+                let totalWidth = cellWidth * gridCols;
+                let totalHeight = cellHeight * gridRows;
+        
+                let startX = 0, startY = 0;
+        
+                if (totalWidth < originalWidth) {
+                    startX = (originalWidth - totalWidth) / 2;
+                }
+                if (totalHeight < originalHeight) {
+                    startY = (originalHeight - totalHeight) / 2;
+                }
+        
                 for (let j = 0; j < gridRows; j++) {
-                    for (let i = 0; i < 3; i++) {
+                    for (let i = 0; i < gridCols; i++) {
                         let cropCanvas = document.createElement("canvas");
                         let cropCtx = cropCanvas.getContext("2d");
-                        cropCanvas.width = cropWidth;
-                        cropCanvas.height = cropHeight;
-                
-                        let startX = i * cropWidth;
-                        
-                        cropCtx.drawImage(img,
-                            startX, startY + j * blockHeight,
-                            cropWidth, cropHeight,
-                            0, 0, cropWidth, cropHeight
+        
+                        cropCanvas.width = 1080; // Ukuran tetap output
+                        cropCanvas.height = 1350;
+        
+                        let sx = startX + i * cellWidth;
+                        let sy = startY + j * cellHeight;
+        
+                        cropCtx.drawImage(img, 
+                            sx, sy, cellWidth, cellHeight,  // Area yang di-crop dari gambar asli
+                            0, 0, 1080, 1350               // Hasil crop akan disesuaikan ke ukuran 1080x1350
                         );
-                
+        
                         croppedData.push(cropCanvas.toDataURL("image/png"));
                     }
                 }
-                
             }
             else if (cropMode === "custom") {
                 // MODE CUSTOM: Memotong dengan grid
