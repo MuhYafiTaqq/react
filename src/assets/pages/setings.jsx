@@ -13,7 +13,7 @@ export default function Setings() {
     const [imgSrc, setImgSrc] = useState(null);
     const [gridCols, setGridCols] = useState(1);
     const [gridRows, setGridRows] = useState(1);
-    const [cropMode, setCropMode] = useState("custom"); // NEW: Menyimpan mode pemotongan
+    const [cropMode, setCropMode] = useState("grid"); // NEW: Menyimpan mode pemotongan
     const prevRef = useRef(null);
     const [height, setHeight] = useState(0);
     const [width, setWidth] = useState(0);
@@ -358,18 +358,18 @@ export default function Setings() {
                         <VscSettings className="h-4 w-4"/>
                         Type
                     </p>
-                    <div className={`inline-flex p-0.5 mb-2 border-1 border-white rounded-full relative before:content-[''] before:absolute before:w-28 before:h-full before:bg-amber-50 before:top-0 before:rounded-full before:z-1 ${cropMode === "custom" ? "before:left-0" : cropMode === "grid" ? "before:right-0" : "before:right-25"}`}>
-                        <button onClick={() => { setCropMode("custom"); resetGrid(); }} 
-                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "custom" ? "text-black font-bold" : "text-white"}`}>
-                            Custom
+                    <div className={`inline-flex p-0.5 mb-2 border-1 border-white rounded-full relative before:content-[''] before:absolute before:w-28 before:h-full before:bg-amber-50 before:top-0 before:rounded-full before:z-1 ${cropMode === "grid" ? "before:left-0" : cropMode === "custom" ? "before:right-0" : "before:right-25"}`}>
+                        <button onClick={() => { setCropMode("grid"); resetGrid(); }} 
+                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "grid" ? "text-black font-bold" : "text-white"}`}>
+                            Grid
                         </button>
                         <button onClick={() => { setCropMode("carousel"); resetGrid(); }} 
                             className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "carousel" ? "text-black font-bold" : "text-white"}`}>
                             Carousel
                         </button>
-                        <button onClick={() => { setCropMode("grid"); resetGrid(); }} 
-                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "grid" ? "text-black font-bold" : "text-white"}`}>
-                            Grid
+                        <button onClick={() => { setCropMode("custom"); resetGrid(); }} 
+                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "custom" ? "text-black font-bold" : "text-white"}`}>
+                            Custom
                         </button>
                     </div>
 
@@ -412,9 +412,7 @@ export default function Setings() {
                     </div>
                     <div>
                         <button onClick={handleCrop} className="mt-2 text-sm bg-green-700 font-bold border-2 border-green-800 text-white w-1/2 px-4 py-0.5 rounded-full">Potong Gambar</button>
-                        <button onClick={() => navigate("/", { state : {
-                            cols: gridCols,
-                            rows: gridRows }})} className="mt-2 text-sm border-2 border-white text-white ml-5 w-1/3 px-4 py-0.5 rounded-full">Back</button>
+                        <button onClick={() => navigate("/")} className="mt-2 text-sm border-2 border-white text-white ml-5 w-1/3 px-4 py-0.5 rounded-full">Back</button>
                     </div>
                 </div>
             </div>
