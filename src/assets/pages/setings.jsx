@@ -412,7 +412,9 @@ export default function Setings() {
                     </div>
                     <div>
                         <button onClick={handleCrop} className="mt-2 text-sm bg-green-700 font-bold border-2 border-green-800 text-white w-1/2 px-4 py-0.5 rounded-full">Potong Gambar</button>
-                        <button onClick={() => navigate("/")} className="mt-2 text-sm border-2 border-white text-white ml-5 w-1/3 px-4 py-0.5 rounded-full">Back</button>
+                        <button onClick={() => navigate("/", { state : {
+                            cols: gridCols,
+                            rows: gridRows }})} className="mt-2 text-sm border-2 border-white text-white ml-5 w-1/3 px-4 py-0.5 rounded-full">Back</button>
                     </div>
                 </div>
             </div>

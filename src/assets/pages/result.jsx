@@ -6,13 +6,13 @@ import { FaDownload } from "react-icons/fa6";
 export default function Result() {
     const location = useLocation();
     const navigate = useNavigate();
-    const croppedImages = location.state?.croppedImages || [];
+    const { croppedImages = [], cols = 1, rows = 1 } = location.state || {};
 
     return (
         <>
             <Header />
             <div className="h-dvh flex flex-col justify-center items-center z-1">
-                <div className="grid pt-6 grid-cols-3 gap-1 h-4/5 p-2 border-2 border-amber-600">
+                <div className={`grid pt-6 ${cols ? `grid-cols-${cols}` : ""} ${rows ? `grid-rows-${rows}` : ""} gap-1 h-4/5 p-2 border-2 border-amber-600`}>
                     {croppedImages.map((src, index) => (
                         <div key={index} className="flex flex-col items-center relative">
                             <img src={src} alt={`Cropped ${index + 1}`} className="border border-black" />
