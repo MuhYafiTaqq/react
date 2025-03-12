@@ -13,7 +13,7 @@ export default function Donations() {
                 <div className="flex flex-col gap-4">
                     {/* Tombol Donasi */}
                     <a 
-                        href="https://saweria.co/example" 
+                        href="https://sociabuzz.com/yafi_taqi/tribe" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-60"
@@ -22,7 +22,7 @@ export default function Donations() {
                     </a>
 
                     <a 
-                        href="https://trakteer.id/example" 
+                        href="https://sociabuzz.com/yafi_taqi/tribe" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-60"
@@ -31,7 +31,7 @@ export default function Donations() {
                     </a>
 
                     <a 
-                        href="https://paypal.me/example" 
+                        href="https://sociabuzz.com/yafi_taqi/tribe" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-60"

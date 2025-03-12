@@ -349,70 +349,73 @@ export default function Setings() {
     return (
         <>
             <Header />
-            <div className="h-dvh pt-6 pb-13">
-                <div ref={prevRef} className="flex flex-col justify-center mx-2 h-3/4 items-center">
+            <div className="h-dvh md:pb-0 md:flex md:container md:mx-auto pt-6 pb-13">
+                <div ref={prevRef} className="flex flex-col justify-center mx-2 h-3/4 md:h-full md:w-2/3 items-center">
                     <canvas ref={canvasRef} className="border-2 border-black"></canvas>
                 </div>
-                <div className="h-1/4 px-3 py-1 w-full">
-                    <p className="flex items-center gap-2 text-white mb-1 text-sm">
-                        <VscSettings className="h-4 w-4"/>
-                        Type
-                    </p>
-                    <div className={`inline-flex p-0.5 mb-2 border-1 border-white rounded-full relative before:content-[''] before:absolute before:w-28 before:h-full before:bg-amber-50 before:top-0 before:rounded-full before:z-1 ${cropMode === "grid" ? "before:left-0" : cropMode === "custom" ? "before:right-0" : "before:right-25"}`}>
-                        <button onClick={() => { setCropMode("grid"); resetGrid(); }} 
-                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "grid" ? "text-black font-bold" : "text-white"}`}>
-                            Grid
-                        </button>
-                        <button onClick={() => { setCropMode("carousel"); resetGrid(); }} 
-                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "carousel" ? "text-black font-bold" : "text-white"}`}>
-                            Carousel
-                        </button>
-                        <button onClick={() => { setCropMode("custom"); resetGrid(); }} 
-                            className={`text-sm z-2 w-25 px-4 rounded ${cropMode === "custom" ? "text-black font-bold" : "text-white"}`}>
-                            Custom
-                        </button>
-                    </div>
-
-                    <div className={`flex ${cropMode != "grid" ? "gap-5" : "" }`}>
-                        <div className="">
-                            {(cropMode === "custom" || cropMode === "carousel") && (
-                            <>
-                                <p className="flex items-center gap-2 text-white mb-1 text-sm">
-                                    <HiOutlineViewColumns className="h-4 w-4"/>
-                                    Columns
-                                </p>
-                                <button onClick={handleRemoveColumn} className="text-lg bg-white text-black font-bold px-2 rounded-full mb-2">
-                                    -
-                                </button>
-                                <h6 className="inline-flex text-white px-4">{gridCols}</h6>
-                                <button onClick={handleAddColumn} className="text-lg bg-white text-black font-bold px-2 rounded-full mb-2">
-                                    +
-                                </button>
-                            </>
-                            )}
+                <div className="md:flex-col md:w-1/3">                    
+                    <div className="h-1/4 md:h-full flex flex-col justify-center px-3 py-1 w-full">
+                        <p className="flex items-center gap-2 text-white mb-1 md:text-2xl text-sm">
+                            <VscSettings className="h-4 w-4 md:w-10 md:h-10"/>
+                            Type
+                        </p>
+                        <div className={`inline-flex p-0.5 justify-between mb-2 md:mb-5 border-1 md:gap-1.5 border-white rounded-full relative`}>
+                            <span className={`absolute md:w-40 w-26 h-full bg-amber-50 top-0 rounded-full z-1 ${cropMode === "grid" ? "left-0" : cropMode === "custom" ? "right-0" : "left-1/2 transform -translate-x-1/2 md:right-40"}`}></span>
+                            <button onClick={() => { setCropMode("grid"); resetGrid(); }} 
+                                className={`text-sm md:text-2xl md:w-37 z-2 w-25 px-4 rounded ${cropMode === "grid" ? "text-black font-bold" : "text-white"}`}>
+                                Grid
+                            </button>
+                            <button onClick={() => { setCropMode("carousel"); resetGrid(); }} 
+                                className={`text-sm md:text-2xl md:w-37 z-2 w-25 px-4 rounded ${cropMode === "carousel" ? "text-black font-bold" : "text-white"}`}>
+                                Carousel
+                            </button>
+                            <button onClick={() => { setCropMode("custom"); resetGrid(); }} 
+                                className={`text-sm md:text-2xl md:w-37 z-2 w-25 px-4 rounded ${cropMode === "custom" ? "text-black font-bold" : "text-white"}`}>
+                                Custom
+                            </button>
                         </div>
 
-                        <div className="">
-                            {(cropMode === "custom" || cropMode === "grid") && (
-                            <>
-                                <p className="flex items-center gap-2 text-white mb-1 text-sm">
-                                    <LuRows3 className="w-4 h-4"/>
-                                    Rows
-                                </p>
-                                <button onClick={handleRemoveRow} className="text-lg bg-white text-black font-bold px-2 rounded-full mb-2">
-                                    -
-                                </button>
-                                <h6 className="inline-flex text-white px-4">{gridRows}</h6>
-                                <button onClick={handleAddRow} className="text-lg bg-white text-black font-bold px-2 rounded-full mb-2">
-                                    +
-                                </button>
-                            </>
-                            )}
+                        <div className={`flex ${cropMode != "grid" ? "gap-5" : "" } md:text-2xl`}>
+                            <div className="">
+                                {(cropMode === "custom" || cropMode === "carousel") && (
+                                <>
+                                    <p className="flex md:text-2xl items-center gap-2 text-white mb-1 text-sm">
+                                        <HiOutlineViewColumns className="h-4 w-4 md:w-10 md:h-10 md:mb-2"/>
+                                        Columns
+                                    </p>
+                                    <button onClick={handleRemoveColumn} className="text-lg md:w-10 md:text-2xl bg-white text-black font-bold md:py-1 md:px-3 px-2 rounded-full mb-2">
+                                        -
+                                    </button>
+                                    <h6 className="inline-flex text-white px-4">{gridCols}</h6>
+                                    <button onClick={handleAddColumn} className="text-lg bg-white text-black md:text-2xl font-bold px-2 md:py-1 md:px-3 rounded-full mb-2">
+                                        +
+                                    </button>
+                                </>
+                                )}
+                            </div>
+
+                            <div className="">
+                                {(cropMode === "custom" || cropMode === "grid") && (
+                                <>
+                                    <p className="flex md:text-2xl items-center gap-2 text-white mb-1 text-sm">
+                                        <LuRows3 className="w-4 h-4 md:w-10 md:h-10 md:mb-2"/>
+                                        Rows
+                                    </p>
+                                    <button onClick={handleRemoveRow} className="text-lg md:text-2xl bg-white text-black font-bold px-2 md:py-1 md:px-3 rounded-full mb-2">
+                                        -
+                                    </button>
+                                    <h6 className="inline-flex text-white px-4">{gridRows}</h6>
+                                    <button onClick={handleAddRow} className="text-lg md:text-2xl bg-white text-black md:py-1 md:px-3 font-bold px-2 rounded-full mb-2">
+                                        +
+                                    </button>
+                                </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <button onClick={handleCrop} className="mt-2 text-sm bg-green-700 font-bold border-2 border-green-800 text-white w-1/2 px-4 py-0.5 rounded-full">Potong Gambar</button>
-                        <button onClick={() => navigate("/")} className="mt-2 text-sm border-2 border-white text-white ml-5 w-1/3 px-4 py-0.5 rounded-full">Back</button>
+                        <div className="w-full flex md:mt-7">
+                            <button onClick={handleCrop} className="mt-2 md:text-2xl text-sm bg-green-700 font-bold border-2 border-green-800 text-white w-1/2 py-0.5 rounded-full">Potong Gambar</button>
+                            <button onClick={() => navigate("/")} className="mt-2 md:text-2xl text-sm border-2 border-white text-white ml-5 w-1/2 py-0.5 rounded-full">Back</button>
+                        </div>
                     </div>
                 </div>
             </div>
