@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css'
 
 import Input from './assets/pages/input';
-import Setings from './assets/pages/setings';
+import Setings from './assets/pages/setings' ;
 import Result from "./assets/pages/result";
 import Donations from "./assets/pages/donations";
 
