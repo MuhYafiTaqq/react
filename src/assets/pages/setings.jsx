@@ -108,7 +108,6 @@ export default function Setings() {
         
         let cellWidth, cellHeight;
         let startX = 0, startY = 0;
-        const ketikagrid = 3;
     
         if (cropMode === "grid") {
             // Hitung ukuran sel berdasarkan aspek rasio
@@ -122,7 +121,7 @@ export default function Setings() {
             // Jika total tinggi lebih besar dari canvas, sesuaikan ukuran grid
             if (totalHeight > canvas.height) {
                 cellHeight = canvas.height / gridRows;
-                cellWidth = cellHeight / aspectRatio;
+                cellWidth = cellHeight / (3 * aspectRatio);
             }
     
             totalWidth = cellWidth * 3;

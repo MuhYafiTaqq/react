@@ -21,7 +21,7 @@ export default function NavBar() {
         <>
             <nav className="h-13 w-full fixed bottom-0 bg-black pb-1 drop-shadow-[0_-1px_10px_rgba(255,255,255,0.1)]
             
-            md:h-full md:left-0 md:w-25
+            md:h-full md:left-0 md:w-18
             ">
                 <div className="h-full w-full flex gap-2 text-white justify-center items-center
                 
@@ -30,7 +30,7 @@ export default function NavBar() {
 
                     <button className={`w-10 h-10 flex flex-col justify-center items-center rounded-xl relative hover:bg-white/20 transition-all duration-400 group
                     
-                    md:w-20 md:h-20
+                    md:w-14 md:h-14
                     ${
                         active === "home"
                             ? "bg-white/20 before:content-[''] before:scale-100 before:transition-all before:duration-400 before:-bottom-2 before:h-1 before:w-5 before:bg-amber-50 before:absolute before:rounded-t-full"
@@ -40,12 +40,12 @@ export default function NavBar() {
                     `}
                         onClick={() => navigate("/")}
                     >
-                        <HiHome className="w-6 h-6 md:w-12 md:h-12" />
+                        <HiHome className="w-6 h-6 md:w-10 md:h-10" />
                     </button>
 
                     <button className={`w-10 h-10 flex flex-col justify-center items-center rounded-xl relative hover:bg-white/20 transition-all duration-400 group
                     
-                    md:w-20 md:h-20
+                    md:w-14 md:h-14
                     ${
                         active === "grid"
                             ? "bg-white/20 before:content-[''] before:scale-100 before:transition-all before:duration-400 before:-bottom-2 before:h-1 before:w-5 before:bg-amber-200 before:absolute before:rounded-t-full"
@@ -55,12 +55,12 @@ export default function NavBar() {
                     `}
                         onClick={() => navigate("/")}
                     >
-                        <BiSolidGridAlt className="w-6 h-6 md:w-12 md:h-12 text-amber-200" />
+                        <BiSolidGridAlt className="w-6 h-6 md:w-10 md:h-10 text-amber-200" />
                     </button>
 
                     <button className={`w-10 h-10 flex flex-col justify-center items-center rounded-xl relative hover:bg-white/20 transition-all duration-400 
                     
-                    md:w-20 md:h-20
+                    md:w-14 md:h-14
                     ${
                         active === "donate"
                             ? "bg-white/20 before:content-[''] before:scale-100 before:transition-all before:duration-400 before:-bottom-2 before:h-1 before:w-5 before:bg-red-400 before:absolute before:rounded-t-full"
@@ -68,7 +68,7 @@ export default function NavBar() {
                     }`}
                         onClick={() => navigate("/donations")}
                     >
-                        <GoHeartFill className="w-6 h-6 md:w-12 md:h-12 text-red-400" />
+                        <GoHeartFill className="w-6 h-6 md:w-10 md:h-10 text-red-400" />
                     </button>
 
                 </div>

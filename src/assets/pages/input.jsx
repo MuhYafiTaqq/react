@@ -50,10 +50,10 @@ export default function Input() {
         <div className="dark">
             <Header />
             <div className="h-dvh flex md:pl-25 flex-col justify-center items-center">
-                <img src={imgStarShip} alt="starship" className="w-35 md:w-80 md:mb-15 mb-7" />
+                <img src={imgStarShip} alt="starship" className="w-35 md:w-65 md:mb-15 mb-7" />
 
                 <div 
-                    className={`relative w-75 h-35 md:w-150 md:h-70 rounded-3xl border-3 border-dashed text-center ${
+                    className={`relative w-75 h-35 md:w-110 md:h-50 rounded-3xl border-3 border-dashed text-center ${
                         isDragging ? "border-blue-400 bg-blue-900/50" : "border-white/20 bg-neutral-700/50"
                     } flex flex-col justify-center items-center transition-all duration-300`}
                     onDragOver={handleDragOver}
@@ -61,11 +61,11 @@ export default function Input() {
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current.click()}
                 >
-                    <img src={imgDocument} alt="" className="w-8 md:w-15 md:mb-7 invert mb-4" />
-                    <h6 className="text-white md:text-2xl text-sm font-bold mb-1">
+                    <img src={imgDocument} alt="" className="w-8 md:w-13 md:mb-7 invert mb-4" />
+                    <h6 className="text-white md:text-xl text-sm font-bold mb-1">
                         {isDragging ? "Drop the file here" : "Drag or click to select a file"}
                     </h6>
-                    <p className="text-white md:text-lg text-xs opacity-50">
+                    <p className="text-white md:text-md text-xs opacity-50">
                         Supported format: PNG, JPG, JPEG
                     </p>
 
