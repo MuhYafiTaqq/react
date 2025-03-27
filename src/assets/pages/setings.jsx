@@ -108,13 +108,15 @@ export default function Setings() {
         
         let cellWidth, cellHeight;
         let startX = 0, startY = 0;
+        const ketikagrid = 3;
     
         if (cropMode === "grid") {
             // Hitung ukuran sel berdasarkan aspek rasio
-            cellWidth = canvas.width / gridCols;
-            cellHeight = cellWidth * aspectRatio;
+
+            cellWidth = canvas.width / 3;
+            cellHeight = cellWidth * 3 * aspectRatio;
     
-            let totalWidth = cellWidth * gridCols;
+            let totalWidth = cellWidth * 3;
             let totalHeight = cellHeight * gridRows;
     
             // Jika total tinggi lebih besar dari canvas, sesuaikan ukuran grid
@@ -123,7 +125,7 @@ export default function Setings() {
                 cellWidth = cellHeight / aspectRatio;
             }
     
-            totalWidth = cellWidth * gridCols;
+            totalWidth = cellWidth * 3;
             totalHeight = cellHeight * gridRows;
     
             // Pusatkan grid di tengah-tengah canvas
@@ -133,6 +135,18 @@ export default function Setings() {
             if (totalHeight < canvas.height) {
                 startY = (canvas.height - totalHeight) / 2;
             }
+
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 2;
+        
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < gridRows; j++) {
+                    let x = startX + i * cellWidth;
+                    let y = startY + j * cellHeight;
+                    ctx.strokeRect(x, y, cellWidth, cellHeight);
+                }
+            }
+            return 1;
         }
         else if (cropMode === "carousel") {
             aspectRatio = 4 / 5; // Rasio 4:5
@@ -272,8 +286,8 @@ export default function Setings() {
                 let cellWidth = originalWidth / gridCols;
                 let cellHeight = originalHeight / gridRows;
 
-                for (let i = 0; i < gridCols; i++) {
-                    for (let j = 0; j < gridRows; j++) {
+                for (let j = 0; j < gridRows; j++) {
+                    for (let i = 0; i < gridCols; i++) {
                         let cropCanvas = document.createElement("canvas");
                         let cropCtx = cropCanvas.getContext("2d");
                         cropCanvas.width = cellWidth;

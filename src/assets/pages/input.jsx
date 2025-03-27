@@ -47,7 +47,7 @@ export default function Input() {
     };
 
     return (
-        <>
+        <div className="dark">
             <Header />
             <div className="h-dvh flex md:pl-25 flex-col justify-center items-center">
                 <img src={imgStarShip} alt="starship" className="w-35 md:w-80 md:mb-15 mb-7" />
@@ -82,6 +82,6 @@ export default function Input() {
                     {image && <img src={image} alt="Preview" className="w-40 h-40 object-cover mt-4" />}
                 </div>
             </div>
-        </>
+        </div>
     );
 }

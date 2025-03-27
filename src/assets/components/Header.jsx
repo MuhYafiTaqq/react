@@ -1,4 +1,4 @@
-import NavBar from "../fragment/NavBar";
+import NavBar from "./NavBar";
 
 export default function Header() {
     return (
