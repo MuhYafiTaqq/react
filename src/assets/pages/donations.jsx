@@ -1,6 +1,9 @@
 import Header from "../components/Header";
+import { useState } from "react";
+import gopayz from '../icon/Gopay.jpg'
 
 export default function Donations() {
+    const [ gopay, setGopay] = useState(false);
     return (
         <>
         <Header />
@@ -16,28 +19,30 @@ export default function Donations() {
                         href="https://sociabuzz.com/yafi_taqi/tribe" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-60"
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-80"
                     >
-                        ❤️ Donasi via Saweria
+                        ❤️ Donasi via Sosiabuzz
                     </a>
 
                     <a 
-                        href="https://sociabuzz.com/yafi_taqi/tribe" 
+                        href="https://link.dana.id/minta/2vsyc3484qo" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-60"
+                        className="bg-blue-400 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-80"
                     >
-                        ☕ Donasi via Trakteer
+                        ☕ Donasi via Dana
                     </a>
 
-                    <a 
-                        href="https://sociabuzz.com/yafi_taqi/tribe" 
-                        target="_blank" 
+                    <button 
                         rel="noopener noreferrer"
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-60"
+                        className="bg-green-400 hover:bg-green-500 text-white px-6 py-3 rounded-md text-lg font-semibold text-center w-80"
+                        onClick={() => setGopay(!gopay)}
                     >
-                        💳 Donasi via PayPal
-                    </a>
+                        💳 Donasi via gopay <br />
+                        <div>
+                            <img src={gopayz} alt="" className={`mt-3 ${gopay ? "block" : "hidden"}`} />
+                        </div>
+                    </button>
                 </div>
             </div>
         </>
